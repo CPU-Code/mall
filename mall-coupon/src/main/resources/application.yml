@@ -4,6 +4,12 @@ spring:
     password: root
     url: jdbc:mysql://42.192.181.137:3306/mall_sms?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    name: mall-coupon
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 42.192.181.137:8848
 
 # MapperScan
 # sql映射文件位置
@@ -15,3 +21,6 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto
+
+server:
+  port: 7000
