@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.cpucode.mall.member.feign.CouponFeignService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,6 +31,26 @@ import com.cpucode.common.utils.R;
 public class MemberController {
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    CouponFeignService couponFeignService;
+
+    /**
+     * 用户 远程调用 优惠卷
+     * @return
+     */
+    @RequestMapping("/coupons")
+    public R test(){
+        MemberEntity memberEntity = new MemberEntity();
+        memberEntity.setNickname("会员昵称cpuCode");
+
+        //假设 cpuCode 去数据库查了后返回了张三的优惠券信息
+        R membercoupons = couponFeignService.memberCoupons();
+
+        //打印会员和优惠券信息
+        return R.ok().put("member", memberEntity)
+                .put("coupons", membercoupons.get("coupons"));
+    }
 
     /**
      * 列表
