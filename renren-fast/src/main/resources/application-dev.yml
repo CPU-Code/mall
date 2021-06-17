@@ -32,12 +32,6 @@ spring:
                 wall:
                     config:
                         multi-statement-allow: true
-    cloud:
-        nacos:
-            discovery:
-                server-addr: 42.192.181.137:8848
-    application:
-        name: renren-fast
 
 ##多数据源的配置
 #dynamic:
@@ -51,4 +45,5 @@ spring:
 #      driver-class-name: org.postgresql.Driver
 #      url: jdbc:postgresql://localhost:5432/renren_security
 #      username: renren
+
 #      password: 123456
