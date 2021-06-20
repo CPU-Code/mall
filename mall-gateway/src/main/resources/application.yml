@@ -10,6 +10,13 @@ spring:
         server-addr: 42.192.181.137:8848
     gateway:
       routes:
+        - id: product_route
+          uri: lb://mall-product   #
+          predicates:           # 什么情况下路由给它
+            - Path=/api/product/**      #
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}  #
+
         - id: admin_route
           uri: lb://renren-fast   # 路由给renren-fast
           predicates:           # 什么情况下路由给它
