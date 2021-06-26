@@ -5,6 +5,7 @@ import qs from 'qs'
 import merge from 'lodash/merge'
 import { clearLoginInfo } from '@/utils'
 
+//  定义http对象，后面定义他的请求拦截器
 const http = axios.create({
   timeout: 1000 * 30,
   withCredentials: true,
