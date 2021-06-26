@@ -1,7 +1,23 @@
 <!--  -->
 <template>
-  <el-tree :data="menus" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
-
+  <el-tree 
+    :data="menus" 
+    :props="defaultProps" 
+    node-key="id"
+    @node-click="handleNodeClick"
+    :expand-on-click-node="false">
+    <span class="custom-tree-node" slot-scope="{ node, data }">
+      <span>{{ node.label }}</span>
+      <span>
+        <el-button v-if="node.level <= 2" type="text" size="mini" @click="() => append(data)">
+          Append
+        </el-button>
+        <el-button v-if="node.childNodes.length == 0" type="text" size="mini" @click="() => remove(node, data)">
+          Delete
+        </el-button>
+      </span>
+    </span>
+  </el-tree>
 </template>
 
 <script>
@@ -31,9 +47,13 @@ export default {
       this.$http({
         url: this.$http.adornUrl('/product/category/list/tree'),
         methods: 'get'
-      }).then(({data}) => {
+      }).then(({ data }) => {
         this.menus = data.data
       })
+    },
+    append (data) {
+    },
+    remove (node, data) {
     }
   },
   // 生命周期 - 创建完成（可以访问当前this实例）
@@ -41,8 +61,7 @@ export default {
     this.getMenus()
   },
   // 生命周期 - 挂载完成（可以访问DOM元素）
-  mounted () {
-  },
+  mounted () {},
   // 生命周期 - 创建之前
   beforeCreate () {},
   // 生命周期 - 挂载之前
@@ -62,5 +81,4 @@ export default {
 
 <style scoped>
 /* @import url (); 引入公共css类 */
-
 </style>
