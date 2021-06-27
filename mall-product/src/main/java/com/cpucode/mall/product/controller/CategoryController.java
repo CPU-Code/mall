@@ -13,8 +13,6 @@ import com.cpucode.mall.product.entity.CategoryEntity;
 import com.cpucode.mall.product.service.CategoryService;
 import com.cpucode.common.utils.R;
 
-
-
 /**
  * 商品三级分类
  *
@@ -38,7 +36,6 @@ public class CategoryController {
         return R.ok().put("data", entities);
     }
 
-
     /**
      * 信息
      */
@@ -57,6 +54,16 @@ public class CategoryController {
     //@RequiresPermissions("product:category:save")
     public R save(@RequestBody CategoryEntity category){
 		categoryService.save(category);
+
+        return R.ok();
+    }
+    /**
+     * 修改排序
+     */
+    @RequestMapping("/update/sort")
+    //@RequiresPermissions("product:category:update")
+    public R updateSort(@RequestBody CategoryEntity[] category){
+        categoryService.updateBatchById(Arrays.asList(category));
 
         return R.ok();
     }
