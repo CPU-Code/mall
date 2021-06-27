@@ -7,7 +7,9 @@
       node-key="catId"
       show-checkbox
       :default-expanded-keys="expandedKey"
-      :expand-on-click-node="false">
+      :expand-on-click-node="false"
+      draggable
+      :allow-drop="allowDrop">
 
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
@@ -63,6 +65,10 @@ export default {
     return {
       // 显示数据
       menus: [],
+      // 添加 分类存储
+      title: '',
+      // 最大深度
+      maxLevel: 0,
       // 回展示 id
       expandedKey: [],
       // 分类名字和子类
@@ -93,6 +99,7 @@ export default {
   watch: {},
   // 方法集合
   methods: {
+    // 获取所有数据
     getMenus () {
       this.$http({
         url: this.$http.adornUrl('/product/category/list/tree'),
@@ -101,6 +108,37 @@ export default {
         this.menus = data.data
       })
     },
+    // 判断拖动位置
+    allowDrop (draggingNode, dropNode, type) {
+      // 1、被拖动的当前节点以及所在的父节点总层数不能大于3
+
+      // 1）、被拖动的当前节点总层数
+      console.log('allowDrop:', draggingNode.data.name, dropNode.data.name, type)
+
+      this.countNodeLevel(draggingNode)
+      // 当前正在拖动的节点 + 父节点所在的深度不大于3 即可
+      let deep = Math.abs(this.maxLevel - draggingNode.level) + 1
+
+      console.log('深度：', deep)
+
+      if (type === 'inner') {
+        return deep + dropNode.level <= 3
+      } else {
+        return deep + dropNode.parent.level <= 3
+      }
+    },
+    // 找到所有子节点，求出最大深度
+    countNodeLevel (node) {
+      if (node.childNodes != null && node.childNodes.length > 0) {
+        for (let i = 0; i < node.childNodes.length; i++) {
+          if (node.childNodes[i].level > this.maxLevel) {
+            this.maxLevel = node.childNodes[i].level
+          }
+          this.countNodeLevel(node.childNodes[i])
+        }
+      }
+    },
+    // 添加
     append (data) {
       console.log('append', data)
 
@@ -116,6 +154,7 @@ export default {
       this.category.sort = 0
       this.category.showStatus = 1
     },
+    // 修改
     edit (data) {
       console.log('要修改的数据', data)
 
@@ -140,6 +179,7 @@ export default {
         this.category.showStatus = data.data.showStatus
       })
     },
+    // 判断是 添加, 还是修改
     submitData () {
       if (this.dialogType === 'add') {
         this.addCategory()
