@@ -1,13 +1,5 @@
-server:
-  port: 88
-
 spring:
-  application:
-    name: mall-gateway
   cloud:
-    nacos:
-      discovery:
-        server-addr: 42.192.181.137:8848
     gateway:
       routes:
         - id: product_route
@@ -23,6 +15,5 @@ spring:
             - Path=/api/**      # 默认前端项目都带上api前缀，就是我们前面题的localhost:88/api
           filters:
             - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}  # 把/api/* 改变成 /renren-fast/*
-
 
 
