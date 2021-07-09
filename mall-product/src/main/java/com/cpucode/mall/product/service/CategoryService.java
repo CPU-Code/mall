@@ -19,7 +19,7 @@ public interface CategoryService extends IService<CategoryEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     /**
-     *
+     * 获取商品三级分类数据
      * @return
      */
     public List<CategoryEntity> listWithTree();
