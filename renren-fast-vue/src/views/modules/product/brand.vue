@@ -6,8 +6,16 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('product:brand:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('product:brand:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('product:brand:save')"
+          type="primary"
+          @click="addOrUpdateHandle()">
+          新增
+        </el-button>
+        <el-button v-if="isAuth('product:brand:delete')"
+          type="danger" @click="deleteHandle()"
+          :disabled="dataListSelections.length <= 0">
+          批量删除
+        </el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -50,7 +58,17 @@
         prop="showStatus"
         header-align="center"
         align="center"
-        label="显示状态[0-不显示；1-显示]">
+        label="显示状态">
+        <template slot-scope="scope">
+          <el-switch
+            v-model="scope.row.showStatus"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            :active-value="1"
+            :inactive-value="0"
+            @change="updateBrandStatus(scope.row)">
+          </el-switch>
+        </template>
       </el-table-column>
       <el-table-column
         prop="firstLetter"
@@ -114,6 +132,23 @@
       this.getDataList()
     },
     methods: {
+      // 修改显示状态
+      updateBrandStatus (data) {
+        console.log('最新信息', data)
+
+        let {brandId, showStatus} = data
+        // 发送请求修改状态
+        this.$http({
+          url: this.$http.adornUrl('/product/brand/update'),
+          method: 'post',
+          data: this.$http.adornData({brandId, showStatus}, false)
+        }).then(({data}) => {
+          this.$message({
+            type: 'success',
+            message: '状态更新成功'
+          })
+        })
+      },
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
